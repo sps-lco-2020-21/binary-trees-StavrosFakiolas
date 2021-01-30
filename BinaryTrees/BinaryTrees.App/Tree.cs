@@ -163,7 +163,7 @@ namespace BinaryTrees.App
         public int Sum(Node cur = null)
         {
             //Sums tree
-            //recursive
+            //recursive - doesnt work yet
             
             if (cur == null)
             {
@@ -182,7 +182,7 @@ namespace BinaryTrees.App
                 rightSum =  Sum(cur.right) + cur.value;
             }
 
-            return leftSum + rightSum;
+            return leftSum + rightSum - cur.value;
         }
 
     }
