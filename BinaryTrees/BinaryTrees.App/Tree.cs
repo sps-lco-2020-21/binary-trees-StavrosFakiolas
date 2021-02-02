@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -68,7 +69,7 @@ namespace BinaryTrees.App
             }
         }
         
-        public void Print( ref string s, ref bool first, Node cur = null)
+        public void Print(ref string s, ref bool first, Node cur = null)
         {
             // write out the tree in a string sorted
             //recursive
@@ -160,29 +161,26 @@ namespace BinaryTrees.App
             return Math.Max(leftDepth, rightDepth);
         }
 
-        public int Sum(Node cur = null)
+        public int Sum(ref int sum, Node cur = null)
         {
-            //Sums tree
-            //recursive - doesnt work yet
-            
+            // sum
+            // recursive
+
             if (cur == null)
             {
                 cur = root;
             }
-            int leftSum = 0;
-            
+            sum = sum + cur.value;
             if (cur.left != null)
             {
-                leftSum = Sum(cur.left) + cur.value;
+                Sum(ref sum, cur.left);
             }
-            int rightSum = 0;
-
             if (cur.right != null)
             {
-                rightSum =  Sum(cur.right) + cur.value;
+                Sum(ref sum, cur.right);
             }
 
-            return leftSum + rightSum - cur.value;
+            return sum;
         }
 
     }
