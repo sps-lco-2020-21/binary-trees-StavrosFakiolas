@@ -68,6 +68,82 @@ namespace BinaryTrees.App
 
             }
         }
+
+        public void Delete(int toDel)
+        {
+            //no children - just delete
+            //1 child - reference previous node to child
+            //2 children
+
+            //non-recursive Delete
+            Node previousNode = null;
+            Node currentNode = root;
+            bool delSuccesfull = false;
+
+            if (root == null) //empty
+            {
+                delSuccesfull = true;
+            }
+            else
+            {
+                while (delSuccesfull == false)
+                {
+                    if (toDel < currentNode.value) //go left please
+                    {
+                        if (currentNode.left == null) //no other pointer
+                        {
+                            delSuccesfull = true; //didnt find a node, so success???
+                        }
+                        else
+                        {
+                            previousNode = currentNode;
+                            currentNode = currentNode.left; //lets see what the pointers have to offer
+                        }
+                    }
+                    else if (toDel > currentNode.value) //go right please
+                    {
+                        if (currentNode.right == null)
+                        {
+                            delSuccesfull = true; //didnt find a node, so success???
+                        }
+                        else
+                        {
+                            previousNode = currentNode;
+                            currentNode = currentNode.right; //lets see what the pointers have to offer
+                        }
+                    }
+                    else //found the node
+                    {
+                        if (currentNode.left == null && currentNode.right == null) //if 0 children
+                        {
+                            if (toDel >= previousNode.value)
+                            {
+                                previousNode.right = null;  //remove right ref
+                            }
+                            else
+                            {
+                                previousNode.left = null; //remove left ref
+                            }
+                        }
+                        else if (currentNode.left == null && currentNode.right != null) //if only right child
+                        {
+                            previousNode.right = currentNode.right;
+                        }
+                        else if (currentNode.left != null && currentNode.right == null) //if only left child
+                        {
+                            previousNode.right = currentNode.left;
+                        }
+                        else // 2 children
+                        {
+                            //not brainstormed yet
+                        }
+                    }
+                }
+
+
+            }
+
+        }
         
         public void Print(ref string s, ref bool first, Node cur = null)
         {
