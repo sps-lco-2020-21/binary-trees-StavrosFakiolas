@@ -12,7 +12,6 @@ namespace BinaryTrees.App
         {
             Tree tree = new Tree(7);
             string result = "";
-            int summing = 0;
             bool first = true;
 
             tree.Add(3);
@@ -32,7 +31,17 @@ namespace BinaryTrees.App
             tree.Print(ref result, ref first);
             Console.WriteLine(result);
             Console.WriteLine(tree.Depth()); //should be 4
-            Console.WriteLine(tree.Sum(ref summing)); //should be 60
+            Console.WriteLine(tree.Sum()); //should be 60
+
+            tree.Delete(12);
+            tree.Delete(8);
+            tree.Delete(tree.Find(3));
+
+            result = "";
+            first = true;
+
+            tree.Print(ref result, ref first);
+            Console.WriteLine(result);
 
             /*for (int i = 0; i <= 100; ++i)
             {

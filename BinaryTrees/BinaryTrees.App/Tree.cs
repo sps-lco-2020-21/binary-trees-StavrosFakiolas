@@ -69,6 +69,81 @@ namespace BinaryTrees.App
             }
         }
 
+        public void Delete(Node toDel)
+        {
+            //no children - just delete
+            //1 child - reference previous node to child
+            //2 children
+
+            //recursive Delete but also non recursive :)
+            Node previousNode = null;
+            Node currentNode = root;
+
+            if (root == null) //empty
+            {
+                return;
+            }
+            else
+            {
+                while (true)
+                {
+                    if (toDel.value < currentNode.value) //go left please
+                    {
+                        if (currentNode.left == null) //no other pointer
+                        {
+                            return; //didnt find a node, so success???
+                        }
+                        else
+                        {
+                            previousNode = currentNode;
+                            currentNode = currentNode.left; //lets see what the pointers have to offer
+                        }
+                    }
+                    else if (toDel.value > currentNode.value) //go right please
+                    {
+                        if (currentNode.right == null)
+                        {
+                            return; //didnt find a node, so success???
+                        }
+                        else
+                        {
+                            previousNode = currentNode;
+                            currentNode = currentNode.right; //lets see what the pointers have to offer
+                        }
+                    }
+                    else //found the node
+                    {
+                        if (currentNode.left == null && currentNode.right == null) //if 0 children
+                        {
+                            if (toDel.value >= previousNode.value)
+                            {
+                                previousNode.right = null;  //remove right ref
+                            }
+                            else
+                            {
+                                previousNode.left = null; //remove left ref
+                            }
+                        }
+                        else if (currentNode.left == null && currentNode.right != null) //if only right child
+                        {
+                            previousNode.right = currentNode.right;
+                        }
+                        else if (currentNode.left != null && currentNode.right == null) //if only left child
+                        {
+                            previousNode.right = currentNode.left;
+                        }
+                        else // 2 children
+                        {
+                            Node successor = min(currentNode.right);
+                            currentNode.value = successor.value;
+                            Delete(successor);
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+
         public void Delete(int toDel)
         {
             //no children - just delete
@@ -78,21 +153,20 @@ namespace BinaryTrees.App
             //non-recursive Delete
             Node previousNode = null;
             Node currentNode = root;
-            bool delSuccesfull = false;
 
             if (root == null) //empty
             {
-                delSuccesfull = true;
+                return;
             }
             else
             {
-                while (delSuccesfull == false)
+                while (true)
                 {
                     if (toDel < currentNode.value) //go left please
                     {
                         if (currentNode.left == null) //no other pointer
                         {
-                            delSuccesfull = true; //didnt find a node, so success???
+                            return; //didnt find a node, so success???
                         }
                         else
                         {
@@ -104,7 +178,7 @@ namespace BinaryTrees.App
                     {
                         if (currentNode.right == null)
                         {
-                            delSuccesfull = true; //didnt find a node, so success???
+                            return; //didnt find a node, so success???
                         }
                         else
                         {
@@ -137,6 +211,7 @@ namespace BinaryTrees.App
                         {
                             //not brainstormed yet
                         }
+                        return;
                     }
                 }
 
@@ -175,7 +250,13 @@ namespace BinaryTrees.App
 
         }
 
+        
         public bool Contains(int value)
+        {
+            return Find(value) != null;
+        }
+
+        public Node Find(int value)
         {
             //non-recursive check
             Node currentNode = root;
@@ -183,7 +264,7 @@ namespace BinaryTrees.App
             {
                 if (currentNode.value == value)
                 {
-                    return true;
+                    return currentNode;
                 }
                 else if (value < currentNode.value) //go left please
                 {
@@ -192,7 +273,7 @@ namespace BinaryTrees.App
                         currentNode = currentNode.left;
                     }
                     else
-                        return false;
+                        return null;
                 }
                 else //go right please
                 {
@@ -201,11 +282,11 @@ namespace BinaryTrees.App
                         currentNode = currentNode.right;
                     }
                     else
-                        return false;
+                        return null;
                 }
             }
 
-            return false;
+            return null;
             
         }
 
@@ -237,7 +318,7 @@ namespace BinaryTrees.App
             return Math.Max(leftDepth, rightDepth);
         }
 
-        public int Sum(ref int sum, Node cur = null)
+        public int Sum(Node cur = null)
         {
             // sum
             // recursive
@@ -246,19 +327,30 @@ namespace BinaryTrees.App
             {
                 cur = root;
             }
-            sum = sum + cur.value;
+            int sum = cur.value;
             if (cur.left != null)
             {
-                Sum(ref sum, cur.left);
+                sum += Sum(cur.left);
             }
             if (cur.right != null)
             {
-                Sum(ref sum, cur.right);
+                sum += Sum(cur.right);
             }
 
             return sum;
         }
 
+        Node min (Node cur)
+        {
+            if (cur.left != null)
+            {
+                return min(cur.left);
+            }
+            else
+            {
+                return cur;
+            }
+        }
     }
     class Node
     {
@@ -271,6 +363,23 @@ namespace BinaryTrees.App
             value = num;
             left = null;
             right = null;
+        }
+
+        public Node Find(int value)
+        {
+            if(this.value == value)
+            {
+                return this;
+            }
+            else if(value < this.value && left != null)
+            {
+                return left.Find(value);
+            }
+            else if (value > this.value && right != null)
+            {
+                return right.Find(value);
+            }
+            return null;
         }
     }
 }
